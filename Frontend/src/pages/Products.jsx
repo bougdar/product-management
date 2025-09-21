@@ -30,23 +30,34 @@ export default function Products() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    const fd = new FormData();
+    Object.keys(form).forEach(key => {
+      if (form[key] !== null && form[key] !== undefined) {
+        fd.append(key, form[key]);
+      }
+    });
+
     if (editing) {
-      await updateProduct(editing, form);
+      await updateProduct(editing, fd);
       setEditing(null);
     } else {
-      await createProduct(form);
+      await createProduct(fd);
     }
+
     setForm({
       name: '',
       description: '',
       category: 'Clothes',
       quantity: 0,
       price: 0,
-      place: ''
+      place: '',
+      image: null
     });
     setShowForm(false);
     fetchProducts();
   };
+
 
   const handleEdit = product => {
     setForm({
@@ -75,8 +86,13 @@ export default function Products() {
       </button>
 
       {showForm && (
-        <form onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
+        <form onSubmit={handleSubmit} style={{ marginTop: '1rem' }} encType="multipart/form-data">
+          {/* ...existing inputs... */}
           <input
+            type="file"
+            accept="image/*"
+            onChange={e => setForm({ ...form, image: e.target.files[0] })}
+          /><input
             placeholder="Name"
             value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })}
@@ -144,8 +160,9 @@ export default function Products() {
               <td>${p.price}</td>
               <td>{p.place}</td>
               <td>
-
+                {p.image && <img src={`http://localhost:5000${p.image}`} alt={p.name} width="80" />}
               </td>
+
               <td>
                 <button onClick={() => handleEdit(p)}>Edit</button>
                 <button onClick={() => handleDelete(p._id)}>Delete</button>

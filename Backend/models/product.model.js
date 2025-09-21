@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
     place: String,
     image: {
         type: String,
-        default: '/iamges/add-product.jpg',
+        default: '/images/add-product.jpg',
     },
 }, { timestamps: true });
 
