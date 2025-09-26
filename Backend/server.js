@@ -2,26 +2,24 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const path = require('path');          // ✅ Add this
+const path = require('path');
 const connectDB = require('./config/connect');
 const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-// ✅ Serve the "public" folder
-// This line already exposes /public so that /images/... is reachable.
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Or explicitly (either way works):
-// app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 connectDB();
 
 // API routes
 app.use('/api/products', productRoutes);
+app.use('/api', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is running');
