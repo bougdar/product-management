@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Products from './pages/Products';
 import Users from './pages/Users';
 import LoginPage from './pages/LoginPage';
+import Orders from './pages/Orders';
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -20,6 +21,9 @@ export default function App() {
         <Route
           path="/products"
           element={token ? <Products /> : <Navigate to="/login" />}
+        /><Route
+          path="/orders"
+          element={token ? <Orders /> : <Navigate to="/login" />}
         />
         <Route
           path="/users"
